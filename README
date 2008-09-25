@@ -1,0 +1,69 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=2381
+
+Description:
+  This script finds #ifdef/#else/#endif keyword, and removes undefined area.
+  And display the defined macros in your source code after executing.
+
+  When we analysis the source code written by another person, a lot of
+  #ifdef are troublesome very much.  This script helps you to analysis it by
+  removing undefined area.
+  Please see the example. It helps you to understand this script work.
+
+Instructions:
+  1 - Put in your plugin directory, and open the C/C++ file
+  2 - Type :RemoveIfdef
+  3 - This script finds ifdef macro and remove undefined area
+  If you want to add the macros, add them to this script' argument.
+
+Feature:
+  - support the comment (// and /* ... */)
+  - decide macro keyword from file extension (support C/C++ and Verilog)
+
+Argument:
+  <None> : Remove undefined area by the macro defined in just source file.
+  [-n]   : Print code with original source code line. This argument should
+           be specified at first.
+           ex) #define AAA
+               #ifdef AAA
+               // comment
+               #endif
+                 ===>
+               1 #define AAA
+               3 // comment
+  String : Add these strings into macro list
+
+Note:
+ 1. This script changes the C/C++ source code directly. If you want to
+    cancel, please undo (u).
+ 2. If some macro are defined in the include files, this script doesn't
+    work exactly.
+
+Examples:
+  - example source code
+      #define AAA
+      // comment 1
+      #ifdef BBB
+      #ifdef AAA
+      // comment 2
+      #else // AAA
+      // comment 3
+      #endif // AAA
+      #else // BBB
+      #ifdef AAA
+      // comment 4
+      #else // AAA
+      // comment 5
+      #endif // AAA
+      #endif // BBB
+
+  - Type RemoveIfdef
+      -> // comment 1
+         // comment 4
+
+  - Type RemoveIfdef BBB
+      -> // comment 1
+         // comment 2
+
+Known Bug:
+ - Does not support include
+ - There are some bugs about /* ... */ comment analysis
